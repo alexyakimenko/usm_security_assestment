@@ -31,3 +31,17 @@ export const RoleFactory = (sequelize: Sequelize) => {
   )
   return Role
 }
+
+export enum Roles {
+  Admin = 'admin',
+  Editor = 'editor',
+  Subscriber = 'subscriber',
+}
+
+export const RoleSeeder = async () => {
+  return await Promise.all(
+    Object.values(Roles).map((role) =>
+      Role.findOrCreate({ where: { name: role } }),
+    ),
+  )
+}

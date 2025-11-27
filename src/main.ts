@@ -1,6 +1,6 @@
 import express from 'express'
 import config from '@/config/config'
-import sequelize from '@/models'
+import sequelize, { seeders } from '@/models'
 import * as path from 'node:path'
 
 const app = express()
@@ -13,6 +13,7 @@ app.get('/', (req: express.Request, res: express.Response) => {
 })
 
 sequelize.sync({ alter: true }).then(async () => {
+  await seeders()
   app.listen(config.app.port, () => {
     console.log(`Server running at http://localhost:${config.app.port}`)
   })
