@@ -1,5 +1,5 @@
 import passport from 'passport'
-import { User } from '@/models'
+import { Role, User } from '@/models'
 import { Strategy } from 'passport-local'
 import bcrypt from 'bcrypt'
 
@@ -9,7 +9,16 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser(async (id, done) => {
-  const user = await User.findByPk(id as number)
+  const user = await User.findByPk(id as number, {
+    include: [
+      {
+        model: Role,
+        as: 'roles',
+        attributes: ['name'],
+        through: { attributes: [] },
+      },
+    ],
+  })
 
   if (!user) {
     return done(null, null)

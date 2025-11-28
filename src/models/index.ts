@@ -13,7 +13,11 @@ const sequelize = new Sequelize(
 const User = UserFactory(sequelize)
 const Role = RoleFactory(sequelize)
 
-User.belongsToMany(Role, { through: 'user_roles', timestamps: false })
+User.belongsToMany(Role, {
+  through: 'user_roles',
+  timestamps: false,
+  as: 'roles',
+})
 Role.belongsToMany(User, { through: 'user_roles' })
 
 export const seeders = async () => {

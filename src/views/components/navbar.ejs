@@ -10,7 +10,7 @@
                 </ul>
             <% } %>
         </div>
-        <% if(user) {%>
+        <% if(user && (isEditor || isAdmin)) {%>
             <div>
                 <a href="" class="hover:underline">Написать статью</a>
             </div>
