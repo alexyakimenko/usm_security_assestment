@@ -10,11 +10,9 @@ import validate from '@/middleware/validate.middleware'
 const router = Router()
 
 router.get('/', controller.list)
-router.get('/create', isAuth, isAdmin, controller.renderCreate)
+router.get('/create', controller.renderCreate)
 router.post(
   '/',
-  isAuth,
-  isAdmin,
   createCategoryValidator,
   validate({
     failureRedirect: 'categories/create',
@@ -22,15 +20,13 @@ router.post(
   }),
   controller.create,
 )
-router.get('/:id/edit', isAuth, isAdmin, controller.renderEdit)
+router.get('/:id/edit', controller.renderEdit)
 router.post(
   '/:id',
-  isAuth,
-  isAdmin,
   updateCategoryValidator,
   validate({ failureFlash: true }),
   controller.update,
 )
-router.post('/:id/delete', isAuth, isAdmin, controller.destroy)
+router.post('/:id/delete', controller.destroy)
 
 export default router

@@ -1,0 +1,81 @@
+<%- include('../../components/head', { page: { title: 'Новая новость' } }) %>
+<%- include('../../components/navbar') %>
+<main class="container mx-auto px-4 py-10">
+  <div class="max-w-4xl mx-auto rounded border border-gray-200 bg-white p-6 shadow-sm space-y-6">
+    <div>
+      <p class="text-sm text-gray-500">Создайте новую новость</p>
+      <h1 class="text-3xl font-bold text-gray-900">Новая новость</h1>
+    </div>
+
+    <% if (errors.general.length) { %>
+      <% errors.general.forEach(function(msg) { %>
+        <div class="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-900">
+          <%= msg %>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <form action="/news" method="post" class="space-y-4">
+      <div class="space-y-1">
+        <label for="title" class="block text-sm font-semibold text-gray-800">Заголовок</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value="<%= values.title %>"
+          class="w-full rounded border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
+          maxlength="100"
+          required
+        />
+        <% errors.title.forEach(function(msg) { %>
+          <p class="text-xs text-red-700"><%= msg %></p>
+        <% }) %>
+      </div>
+
+      <div class="space-y-1">
+        <label for="category_id" class="block text-sm font-semibold text-gray-800">Категория</label>
+        <select
+          id="category_id"
+          name="category_id"
+          class="w-full rounded border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
+          required
+        >
+          <option value="" disabled <%= !values.category_id ? 'selected' : '' %>>Выберите категорию</option>
+          <% categories.forEach(function(category) { %>
+            <option value="<%= category.id %>" <%= String(values.category_id) === String(category.id) ? 'selected' : '' %>>
+              <%= category.name %>
+            </option>
+          <% }) %>
+        </select>
+        <% errors.category_id.forEach(function(msg) { %>
+          <p class="text-xs text-red-700"><%= msg %></p>
+        <% }) %>
+      </div>
+
+      <div class="space-y-1">
+        <label for="content" class="block text-sm font-semibold text-gray-800">Содержимое</label>
+        <textarea
+          id="content"
+          name="content"
+          rows="8"
+          class="w-full rounded border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
+          required
+        ><%= values.content %></textarea>
+        <% errors.content.forEach(function(msg) { %>
+          <p class="text-xs text-red-700"><%= msg %></p>
+        <% }) %>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button
+          type="submit"
+          class="inline-flex items-center justify-center rounded bg-gray-900 px-4 py-2 text-white hover:bg-gray-700 transition-colors cursor-pointer"
+        >
+          Создать
+        </button>
+        <a href="/news" class="text-sm text-gray-700 hover:underline">Отмена</a>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('../../components/footer') %>

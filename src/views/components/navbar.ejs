@@ -5,9 +5,13 @@
                 <h2 class="text-2xl font-bold">NewS</h2>
             </a>
             <ul class="flex gap-4 text-sm">
-                <li class="hover:underline"><a href="/categories">Категории</a></li>
                 <% if (user && isAdmin) { %>
+                    <li class="hover:underline"><a href="/categories">Категории</a></li>
                     <li class="hover:underline"><a href="/categories/create">Добавить категорию</a></li>
+                <% } %>
+                <% if (user && (isEditor || isAdmin)) { %>
+                    <li class="hover:underline"><a href="/news">Список новости</a></li>
+                    <li class="hover:underline"><a href="/news/create">Добавить новость</a></li>
                 <% } %>
             </ul>
         </div>
