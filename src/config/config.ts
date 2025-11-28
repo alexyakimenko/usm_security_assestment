@@ -10,6 +10,9 @@ interface Config {
   app: {
     port: number
   }
+  secrets: {
+    session: string
+  }
 }
 
 const config: Config = {
@@ -21,6 +24,9 @@ const config: Config = {
   },
   app: {
     port: Number(process.env.APP_PORT),
+  },
+  secrets: {
+    session: process.env.SESSION_SECRET!,
   },
 }
 

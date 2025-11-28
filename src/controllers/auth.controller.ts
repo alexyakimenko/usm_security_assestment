@@ -11,5 +11,5 @@ export const renderLogin = async (
   req: express.Request,
   res: express.Response,
 ) => {
-  res.render('pages/login')
+  res.render('pages/login', { errors: req.flash('error') })
 }
