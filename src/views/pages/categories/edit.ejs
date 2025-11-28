@@ -1,0 +1,66 @@
+<%- include('../../components/head', { page: { title: 'Редактирование категории' } }) %>
+<%- include('../../components/navbar') %>
+<main class="container mx-auto px-4 py-10">
+  <div class="max-w-3xl mx-auto rounded border border-gray-200 bg-white p-6 shadow-sm space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-sm text-gray-500">Измените данные категории</p>
+        <h1 class="text-3xl font-bold text-gray-900">Редактирование категории</h1>
+      </div>
+      <form action="/categories/<%= categoryId %>/delete" method="post" onsubmit="return confirm('Удалить категорию?');">
+        <button type="submit" class="text-sm text-red-700 hover:underline cursor-pointer">Удалить</button>
+      </form>
+    </div>
+
+    <% if (errors.general.length) { %>
+      <% errors.general.forEach(function(msg) { %>
+        <div class="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-900">
+          <%= msg %>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <form action="/categories/<%= categoryId %>" method="post" class="space-y-4">
+      <div class="space-y-1">
+        <label for="name" class="block text-sm font-semibold text-gray-800">Название</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<%= category.name %>"
+          class="w-full rounded border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
+          maxlength="30"
+          required
+        />
+        <% errors.name.forEach(function(msg) { %>
+          <p class="text-xs text-red-700"><%= msg %></p>
+        <% }) %>
+      </div>
+
+      <div class="space-y-1">
+        <label for="description" class="block text-sm font-semibold text-gray-800">Описание</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="5"
+          class="w-full rounded border border-gray-300 px-3 py-2 focus:border-gray-900 focus:outline-none"
+          required
+        ><%= category.description %></textarea>
+        <% errors.description.forEach(function(msg) { %>
+          <p class="text-xs text-red-700"><%= msg %></p>
+        <% }) %>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button
+          type="submit"
+          class="inline-flex items-center justify-center rounded bg-gray-900 px-4 py-2 text-white hover:bg-gray-700 transition-colors cursor-pointer"
+        >
+          Сохранить
+        </button>
+        <a href="/categories" class="text-sm text-gray-700 hover:underline">Назад</a>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('../../components/footer') %>

@@ -1,0 +1,64 @@
+<%- include('../../components/head', { page: { title: 'Категории' } }) %>
+<%- include('../../components/navbar') %>
+<main class="container mx-auto px-4 py-10 space-y-6">
+  <div class="flex items-center justify-between gap-4">
+    <div>
+      <p class="text-sm text-gray-500">Управляйте категориями новостей</p>
+      <h1 class="text-3xl font-bold text-gray-900">Категории</h1>
+    </div>
+    <% if (isAdmin) { %>
+      <a
+        href="/categories/create"
+        class="inline-flex items-center gap-2 rounded bg-gray-900 px-4 py-2 text-white hover:bg-gray-700 transition-colors"
+      >
+        <span class="text-lg leading-none">+</span>
+        <span>Добавить категорию</span>
+      </a>
+    <% } %>
+  </div>
+
+  <% if (messages.success.length) { %>
+    <% messages.success.forEach(function(msg) { %>
+      <div class="rounded border border-green-200 bg-green-50 px-4 py-3 text-green-900">
+        <%= msg %>
+      </div>
+    <% }) %>
+  <% } %>
+  <% if (messages.error.length) { %>
+    <% messages.error.forEach(function(msg) { %>
+      <div class="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-900">
+        <%= msg %>
+      </div>
+    <% }) %>
+  <% } %>
+
+  <div class="overflow-hidden rounded border border-gray-200">
+    <div class="grid grid-cols-12 bg-gray-50 px-4 py-2 text-sm font-semibold text-gray-600">
+      <div class="col-span-3">Название</div>
+      <div class="col-span-8">Описание</div>
+      <div class="col-span-1 text-right">Действия</div>
+    </div>
+    <% if (categories.length === 0) { %>
+      <div class="px-4 py-6 text-gray-500">Нет категорий.</div>
+    <% } %>
+    <% categories.forEach(function(category) { %>
+      <div class="grid grid-cols-12 border-t border-gray-200 px-4 py-3 items-center">
+        <div class="col-span-3 font-medium text-gray-900"><%= category.name %></div>
+        <div class="col-span-8 text-gray-700"><%= category.description %></div>
+        <div class="col-span-1 flex justify-end">
+          <% if (isAdmin) { %>
+            <div class="flex items-center gap-3">
+              <a href="/categories/<%= category.id %>/edit" class="text-sm text-blue-700 hover:underline">Редактировать</a>
+              <form action="/categories/<%= category.id %>/delete" method="post" onsubmit="return confirm('Удалить категорию?');">
+                <button type="submit" class="text-sm text-red-700 hover:underline cursor-pointer">Удалить</button>
+              </form>
+            </div>
+          <% } else { %>
+            <span class="text-xs text-gray-400">—</span>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</main>
+<%- include('../../components/footer') %>

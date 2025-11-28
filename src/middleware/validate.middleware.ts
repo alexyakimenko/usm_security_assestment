@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 
 interface ValidateConfig {
-  failureRedirect: string
+  failureRedirect?: string
   failureFlash?: boolean
 }
 
@@ -21,7 +21,9 @@ const validate =
       if (failureFlash) {
         req.flash('prev', req.body)
       }
-      return res.redirect(failureRedirect)
+      if (failureRedirect) {
+        return res.redirect(failureRedirect)
+      }
     }
     next()
   }

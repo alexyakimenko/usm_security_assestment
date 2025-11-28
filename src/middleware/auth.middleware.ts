@@ -1,5 +1,5 @@
 import express from 'express'
-import { Role } from '@/models/role.model'
+import { Role, Roles } from '@/models/role.model'
 
 export const authViews = (
   req: express.Request,
@@ -21,4 +21,33 @@ export const authViews = (
   res.locals.isEditor = isEditor
 
   next()
+}
+
+export const isAuth = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
+  if (!(req.isAuthenticated && req.isAuthenticated())) {
+    req.flash('error', 'Авторизуйтесь, чтобы продолжить.')
+    return res.redirect('/auth/login')
+  }
+
+  return next()
+}
+
+export const isAdmin = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
+  // @ts-ignore
+  const user = req.user.roles.some((role) => role.name === Roles.Admin)
+
+  if (!user) {
+    req.flash('error', 'У вас нет прав для выполнения этого действия.')
+    return res.redirect('/')
+  }
+
+  return next()
 }
