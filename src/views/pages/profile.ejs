@@ -1,6 +1,33 @@
 <%- include('../components/head', { page: {title: '404 Not Found'} }) %>
 <%- include('../components/navbar') %>
 <main>
-    <div class="container"><%= user.username %></div>
+    <div class="container mx-auto mt-4">
+        <h1 class="font-bold text-2xl">Профиль: <%= profile.user.username %></h1>
+        <div class="flex flex-col gap-2 mt-4">
+            <p>Username: <%= profile.user.username %></p>
+            <p>Email: <%= profile.user.email %></p>
+            <div class="flex gap-2 items-center">
+                <h2>Роли:</h2>
+                <ul class="flex gap-4 items-center">
+                    <% for (let role of profile.user.roles) { %>
+                        <li class="bg-blue-500 px-3 font-medium py-1 rounded text-white"><%= role.name %></li>
+                    <% } %>
+                </ul>
+            </div>
+            <div class="flex gap-4">
+                <% if(user && user.id === profile.user.id) {%>
+                    <form action="/auth/logout" method="post">
+                        <button type="submit" class="border rounded px-2 py-1 cursor-pointer">Выйти</button>
+                    </form>
+                <% } %>
+                <% if(user && user.id !== profile.user.id && isAdmin) { %>
+                    <form action="/user/remove/<%= profile.user.id %>" method="post">
+                        <button type="submit" class="border border-red-500 text-red-500 rounded px-2 py-1 cursor-pointer">Удалить</button>
+                    </form>
+                    <a href="/user/edit/<%= profile.user.username %>" class="border border-blue-500 text-blue-500 rounded px-2 py-1 cursor-pointer">Изменить</a>
+                <% } %>
+            </div>
+        </div>
+    </div>
 </main>
 <%- include('../components/footer') %>
