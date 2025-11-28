@@ -8,6 +8,7 @@ import passport from 'passport'
 import flash from 'connect-flash'
 
 import '@/strategies/local.strategy'
+import { authViews } from '@/middleware/auth.middleware'
 
 const app = express()
 
@@ -28,6 +29,8 @@ app.use(
 app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())
+
+app.use(authViews)
 
 app.use(router)
 
