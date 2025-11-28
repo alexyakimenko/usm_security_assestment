@@ -2,15 +2,14 @@ import express from 'express'
 import config from '@/config/config'
 import sequelize, { seeders } from '@/models'
 import * as path from 'node:path'
+import router from '@/routes'
 
 const app = express()
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 
-app.get('/', (req: express.Request, res: express.Response) => {
-  res.render('index')
-})
+app.use('/', router)
 
 sequelize.sync({ alter: true }).then(async () => {
   await seeders()
