@@ -2,6 +2,8 @@ import { NextFunction, Router } from 'express'
 import * as controller from '@/controllers/auth.controller'
 import { Request, Response } from 'express'
 import passport from 'passport'
+import { loginValidator } from '@/validators/user.validator'
+import validate from '@/middleware/validate.middleware'
 
 const router = Router()
 
@@ -10,6 +12,10 @@ router.get('/login', controller.renderLogin)
 
 router.post(
   '/login',
+  loginValidator,
+  validate({
+    failureRedirect: '/auth/login',
+  }),
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/auth/login',
