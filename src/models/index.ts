@@ -61,17 +61,13 @@ UserActionLog.belongsTo(User, {
 UserActionLog.belongsTo(Role, {
   foreignKey: 'role_id',
 })
+
+User.belongsToMany(Category, { through: 'subscriptions', as: 'subs' })
+Category.belongsToMany(User, { through: 'subscriptions' })
+
 export const seeders = async () => {
   await Promise.all([await RoleSeeder()])
 }
 
 export default sequelize
-export {
-  User,
-  Role,
-  Category,
-  News,
-  UserActionLog,
-  AppErrorLog,
-  HttpErrorLog,
-}
+export { User, Role, Category, News, UserActionLog, AppErrorLog, HttpErrorLog }
