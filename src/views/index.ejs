@@ -15,6 +15,19 @@
             </a>
         </div>
 
+        <% const currentCategory = Number(activeCategoryId) || null %>
+        <div class="space-y-3">
+            <p class="text-sm font-semibold text-slate-800">Категории</p>
+            <div class="flex items-center gap-2 overflow-x-auto rounded-xl border border-slate-200 bg-white p-3">
+                <a href="/" class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold shadow-sm transition <%= !currentCategory ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-800 hover:bg-slate-200' %>">Все</a>
+                <% (categories || []).forEach(function(category) { %>
+                    <a href="/?category=<%= category.id %>" class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold shadow-sm transition <%= currentCategory === Number(category.id) ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-800 hover:bg-slate-200' %>">
+                        <%= category.name %>
+                    </a>
+                <% }) %>
+            </div>
+        </div>
+
         <%
             const list = Array.isArray(news) ? news : []
             const hasNews = list.length > 0

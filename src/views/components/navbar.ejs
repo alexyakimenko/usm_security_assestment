@@ -7,8 +7,14 @@
             </a>
             <ul class="hidden md:flex items-center gap-3 text-sm font-medium text-slate-700">
                 <li><a class="rounded-lg px-3 py-2 hover:bg-slate-100" href="/news">Новости</a></li>
-                <% if (user && isAdmin) { %>
+                <% if (user) { %>
+                    <li><a class="rounded-lg px-3 py-2 hover:bg-slate-100" href="/news/favorites">Избранное</a></li>
                     <li><a class="rounded-lg px-3 py-2 hover:bg-slate-100" href="/categories">Категории</a></li>
+                <% } %>
+                <% if (user && isAdmin) { %>
+                    <li><a class="rounded-lg px-3 py-2 hover:bg-slate-100" href="/user">Пользователи</a></li>
+                <% } %>
+                <% if (user && isAdmin) { %>
                     <li><a class="rounded-lg px-3 py-2 hover:bg-slate-100" href="/categories/create">Создать категорию</a></li>
                 <% } %>
                 <% if (user && (isEditor || isAdmin)) { %>

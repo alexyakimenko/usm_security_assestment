@@ -37,17 +37,18 @@
     <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div class="grid grid-cols-12 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-600">
         <div class="col-span-3">Название</div>
-        <div class="col-span-8">Описание</div>
-        <div class="col-span-1 text-right">Действия</div>
+        <div class="col-span-7">Описание</div>
+        <div class="col-span-2 text-right">Действия</div>
       </div>
       <% if (categories.length === 0) { %>
         <div class="px-4 py-6 text-slate-600">Категорий пока нет.</div>
       <% } %>
       <% categories.forEach(function(category) { %>
+        <% const isSubscribed = (subscribedIds || []).includes(category.id) %>
         <div class="grid grid-cols-12 border-t border-slate-200 px-4 py-3 items-center">
           <div class="col-span-3 font-medium text-slate-900"><%= category.name %></div>
-          <div class="col-span-8 text-slate-700"><%= category.description %></div>
-          <div class="col-span-1 flex justify-end">
+          <div class="col-span-7 text-slate-700"><%= category.description %></div>
+          <div class="col-span-2 flex justify-end">
             <% if (isAdmin) { %>
               <div class="flex items-center gap-3 text-sm">
                 <a href="/categories/<%= category.id %>/edit" class="text-slate-900 hover:underline">Редактировать</a>
@@ -56,7 +57,11 @@
                 </form>
               </div>
             <% } else { %>
-              <span class="text-xs text-slate-400">—</span>
+              <form action="/categories/<%= category.id %>/<%= isSubscribed ? 'unsubscribe' : 'subscribe' %>" method="post">
+                <button type="submit" class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100 cursor-pointer">
+                  <%= isSubscribed ? 'Отписаться' : 'Подписаться' %>
+                </button>
+              </form>
             <% } %>
           </div>
         </div>

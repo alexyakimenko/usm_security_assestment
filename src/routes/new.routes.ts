@@ -10,6 +10,7 @@ import validate from '@/middleware/validate.middleware'
 const router = Router()
 
 router.get('/', controller.list)
+router.get('/favorites', isAuth, controller.favorites)
 router.get('/create', isAuth, isEditor, controller.renderCreate)
 router.post(
   '/',

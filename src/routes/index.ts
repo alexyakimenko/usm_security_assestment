@@ -6,27 +6,33 @@ import newsRouter from '@/routes/new.routes'
 import { Category } from '@/models/category.model'
 import { News } from '@/models/new.model'
 import { User } from '@/models/user.model'
-import { isAdmin, isAuth, isEditor } from '@/middleware/auth.middleware'
+import { isAuth } from '@/middleware/auth.middleware'
 
 const router = Router()
 
-router.get('/', async (_: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
+  const categories = await Category.findAll({ order: [['name', 'ASC']] })
+  const activeCategoryId = req.query.category
+    ? Number(req.query.category)
+    : null
+
   const news = await News.findAll({
     include: [
       { model: Category, attributes: ['name'] },
       { model: User, attributes: ['username'] },
     ],
+    where: activeCategoryId ? { category_id: activeCategoryId } : undefined,
     order: [['createdAt', 'DESC']],
     limit: 9,
   })
 
-  res.render('index', { news })
+  res.render('index', { news, categories, activeCategoryId })
 })
 
 router.use('/auth', authRouter)
 router.use('/user', userRouter)
-router.use('/categories', isAuth, isAdmin, categoryRouter)
-router.use('/news', isAuth, isEditor, newsRouter)
+router.use('/categories', isAuth, categoryRouter)
+router.use('/news', newsRouter)
 
 // not found page
 router.use((_: Request, res: Response) => {

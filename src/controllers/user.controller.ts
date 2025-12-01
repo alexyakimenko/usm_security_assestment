@@ -128,3 +128,17 @@ export const edit = async (req: express.Request, res: express.Response) => {
 
   res.redirect(`/user/profile/${user.username}`)
 }
+
+export const list = async (_req: express.Request, res: express.Response) => {
+  const users = await User.findAll({
+    order: [['createdAt', 'DESC']],
+    include: {
+      model: Role,
+      as: 'roles',
+      attributes: ['name'],
+      through: { attributes: [] },
+    },
+  })
+
+  res.render('pages/user/index', { users })
+}

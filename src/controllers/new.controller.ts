@@ -2,6 +2,7 @@ import express from 'express'
 import { Category } from '@/models/category.model'
 import { News } from '@/models/new.model'
 import { User } from '@/models/user.model'
+import { Op } from 'sequelize'
 import { validationResult } from 'express-validator'
 
 const getFormData = async (req: express.Request) => {
@@ -33,6 +34,46 @@ export const list = async (req: express.Request, res: express.Response) => {
       success: req.flash('success'),
       error: req.flash('error'),
     },
+  })
+}
+
+export const favorites = async (
+  req: express.Request,
+  res: express.Response,
+) => {
+  const user = req.user as User
+  // @ts-ignore sequelize mixin for subscriptions
+  const categories = await (user as any).getSubs({ order: [['name', 'ASC']] })
+  const subscribedIds = categories.map((category: { id: number }) => category.id)
+
+  const requestedCategoryId = Number(req.query.category) || null
+  const activeCategoryId =
+    requestedCategoryId && subscribedIds.includes(requestedCategoryId)
+      ? requestedCategoryId
+      : null
+
+  const hasSubscriptions = subscribedIds.length > 0
+
+  const news = hasSubscriptions
+    ? await News.findAll({
+        where: {
+          category_id: activeCategoryId
+            ? activeCategoryId
+            : { [Op.in]: subscribedIds },
+        },
+        include: [
+          { model: Category, attributes: ['name'] },
+          { model: User, attributes: ['username'] },
+        ],
+        order: [['createdAt', 'DESC']],
+      })
+    : []
+
+  return res.render('pages/news/favorites', {
+    news,
+    categories,
+    activeCategoryId,
+    hasSubscriptions,
   })
 }
 
