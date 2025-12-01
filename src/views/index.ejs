@@ -56,27 +56,27 @@
                 </article>
 
                 <div class="space-y-4">
-                    <div class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-xl">
-                        <p class="text-sm uppercase tracking-[0.2em] text-gray-400">Выбор редакции</p>
-                        <ul class="mt-4 space-y-3">
-                            <% if (!otherNews.length) { %>
-                                <li class="rounded-2xl bg-white/5 p-3 text-sm text-gray-300">Больше статей появится совсем скоро.</li>
-                            <% } %>
-                            <% otherNews.slice(0, 3).forEach(function(item) { %>
-                                <li class="rounded-2xl bg-white/5 p-3 transition hover:-translate-y-0.5 hover:bg-white/10">
-                                    <a href="/news" class="block space-y-1">
-                                        <div class="flex items-center justify-between text-xs text-gray-300">
-                                            <span><%= item.Category?.name || 'Без категории' %></span>
-                                            <span><%= formatDate(item.updatedAt) %></span>
-                                        </div>
-                                        <p class="font-semibold leading-snug text-white"><%= item.title %></p>
-                                        <p class="text-sm text-gray-300"><%= preview(item.content, 90) %></p>
-                                        <p class="text-xs text-gray-400">Автор: <span class="text-white"><%= item.User?.username || 'Без автора' %></span></p>
-                                    </a>
-                                </li>
-                            <% }) %>
-                        </ul>
-                    </div>
+<!--                    <div class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-xl">-->
+<!--                        <p class="text-sm uppercase tracking-[0.2em] text-gray-400">Выбор редакции</p>-->
+<!--                        <ul class="mt-4 space-y-3">-->
+<!--                            <% if (!otherNews.length) { %>-->
+<!--                                <li class="rounded-2xl bg-white/5 p-3 text-sm text-gray-300">Больше статей появится совсем скоро.</li>-->
+<!--                            <% } %>-->
+<!--                            <% otherNews.slice(0, 3).forEach(function(item) { %>-->
+<!--                                <li class="rounded-2xl bg-white/5 p-3 transition hover:-translate-y-0.5 hover:bg-white/10">-->
+<!--                                    <a href="/news" class="block space-y-1">-->
+<!--                                        <div class="flex items-center justify-between text-xs text-gray-300">-->
+<!--                                            <span><%= item.Category?.name || 'Без категории' %></span>-->
+<!--                                            <span><%= formatDate(item.updatedAt) %></span>-->
+<!--                                        </div>-->
+<!--                                        <p class="font-semibold leading-snug text-white"><%= item.title %></p>-->
+<!--                                        <p class="text-sm text-gray-300"><%= preview(item.content, 90) %></p>-->
+<!--                                        <p class="text-xs text-gray-400">Автор: <span class="text-white"><%= item.User?.username || 'Без автора' %></span></p>-->
+<!--                                    </a>-->
+<!--                                </li>-->
+<!--                            <% }) %>-->
+<!--                        </ul>-->
+<!--                    </div>-->
                     <div class="rounded-3xl border border-white/10 bg-gradient-to-r from-emerald-500/10 via-indigo-500/10 to-purple-500/10 p-6 shadow-xl">
                         <h3 class="text-lg font-semibold text-white">Будьте в курсе</h3>
                         <p class="mt-2 text-sm text-gray-200">Периодические подборки свежих публикаций без спама.</p>
