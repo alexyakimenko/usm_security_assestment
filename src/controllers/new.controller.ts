@@ -36,6 +36,22 @@ export const list = async (req: express.Request, res: express.Response) => {
   })
 }
 
+export const show = async (req: express.Request, res: express.Response) => {
+  const newsItem = await News.findByPk(req.params.id, {
+    include: [
+      { model: Category, attributes: ['name'] },
+      { model: User, attributes: ['username'] },
+    ],
+  })
+
+  if (!newsItem) {
+    req.flash('error', 'Новость не найдена.')
+    return res.redirect('/news')
+  }
+
+  return res.render('pages/news/show', { newsItem })
+}
+
 export const renderCreate = async (
   req: express.Request,
   res: express.Response,
@@ -52,7 +68,7 @@ export const create = async (req: express.Request, res: express.Response) => {
     // @ts-ignore
     author_id: req.user?.id,
   })
-  req.flash('success', 'Новость создана.')
+  req.flash('success', 'Новость опубликована.')
   return res.redirect('/news')
 }
 

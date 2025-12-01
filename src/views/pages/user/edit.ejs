@@ -1,35 +1,42 @@
-<%- include('../../components/head', { page: {title: '404 Not Found'} }) %>
+<%- include('../../components/head', { page: {title: 'Редактирование профиля'} }) %>
 <%- include('../../components/navbar') %>
-<main>
-    <div class="container mx-auto mt-4">
-        <h1 class="font-bold text-2xl">Профиль: <%= profile.user.username %></h1>
-        <form action="/user/edit/<%= profile.user.id %>" method="post">
-            <div class="flex flex-col gap-2 mt-4">
-                    <div class="flex flex-col gap-2">
-                    <label for="username">
-                        <p>Username: <input type="text" value="<%= profile.user.username %>" name="username" id="username"></p>
-                    </label>
-                    <label for="email">
-                        <p>Email: <input type="text" value="<%= profile.user.email %>" name="email" id="email"></p>
-                    </label>
-                    <div class="flex gap-2 items-start">
-                        <label for="roles"><h2>Роли:</h2></label>
-                        <select name="roles[]" id="roles" multiple>
-                            <% for(let role of roles) {%>
-                                <option
-                                        value="<%= role %>"
-                                        <% if(profile.user.roles.map(role => role.name).includes(role)) {%>selected<% } %>
-                                ><%= role %></option>
-                            <% } %>
-                        </select>
-                    </div></div>
-                <div class="flex gap-4">
-                    <% if(user && user.id !== profile.user.id) { %>
-                        <button type="submit" class="border border-blue-500 text-blue-500 rounded px-2 py-1 cursor-pointer">Сохранить</button>
-                    <% } %>
+
+<main class="bg-slate-50">
+    <section class="container mx-auto max-w-4xl px-4 py-12 space-y-8">
+        <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm space-y-2">
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Профиль</p>
+            <h1 class="text-2xl font-bold text-slate-900">Редактирование пользователя</h1>
+            <p class="text-sm text-slate-600">Обновите данные и роли для <span class="font-semibold text-slate-900"><%= profile.user.username %></span>.</p>
+        </div>
+
+        <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+            <form action="/user/edit/<%= profile.user.id %>" method="post" class="space-y-5">
+                <div class="space-y-1">
+                    <label for="username" class="text-sm font-semibold text-slate-800">Имя пользователя</label>
+                    <input type="text" value="<%= profile.user.username %>" name="username" id="username" class="w-full rounded-lg border border-slate-200 px-3 py-2 shadow-inner focus:border-slate-900 focus:outline-none">
                 </div>
-            </div>
-        </form>
-    </div>
+                <div class="space-y-1">
+                    <label for="email" class="text-sm font-semibold text-slate-800">Email</label>
+                    <input type="text" value="<%= profile.user.email %>" name="email" id="email" class="w-full rounded-lg border border-slate-200 px-3 py-2 shadow-inner focus:border-slate-900 focus:outline-none">
+                </div>
+                <div class="space-y-2">
+                    <label for="roles" class="text-sm font-semibold text-slate-800">Роли</label>
+                    <select name="roles[]" id="roles" multiple class="w-full rounded-lg border border-slate-200 px-3 py-2 focus:border-slate-900 focus:outline-none">
+                        <% for(let role of roles) { %>
+                            <option value="<%= role %>" <%= profile.user.roles.map((role) => role.name).includes(role) ? 'selected' : '' %>><%= role %></option>
+                        <% } %>
+                    </select>
+                    <p class="text-xs text-slate-500">Удерживайте Ctrl (Windows) или Command (Mac), чтобы выбрать несколько ролей.</p>
+                </div>
+                <div class="flex gap-3">
+                    <% if(user && user.id !== profile.user.id) { %>
+                        <button type="submit" class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 cursor-pointer">Сохранить изменения</button>
+                    <% } %>
+                    <a href="/user/profile" class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </section>
 </main>
+
 <%- include('../../components/footer') %>

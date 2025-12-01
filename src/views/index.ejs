@@ -1,24 +1,25 @@
 <%- include('components/head', { page: { title: 'Главная | NewS' } }) %>
 <%- include('components/navbar') %>
 
-<main class="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white">
-    <section class="container mx-auto px-4 py-14 space-y-12">
+<main class="bg-slate-50">
+    <section class="container mx-auto max-w-6xl px-4 py-12 space-y-12">
         <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div class="space-y-3">
-                <p class="text-sm uppercase tracking-[0.25em] text-gray-400">Свежие статьи</p>
-                <h1 class="text-4xl font-bold tracking-tight text-white">Главное за сегодня</h1>
-                <p class="max-w-2xl text-gray-400">Избранные материалы редакции: дайджест новостей, аналитика и самые читаемые тексты.</p>
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Лента редакции</p>
+                <h1 class="text-4xl font-bold tracking-tight text-slate-900">Главные материалы сегодня</h1>
+                <p class="max-w-2xl text-slate-600">Свежие статьи, аналитика и новости, которые нужно прочитать. Всё в одном месте и без лишнего визуального шума.</p>
             </div>
-            <a href="/news" class="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white hover:text-gray-900">
-                Смотреть все
+            <a href="/news" class="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:-translate-y-0.5 hover:bg-white">
+                Смотреть все публикации
                 <span aria-hidden="true">→</span>
             </a>
         </div>
 
         <%
-            const hasNews = Array.isArray(news) && news.length > 0
-            const featured = hasNews ? news[0] : null
-            const otherNews = hasNews ? news.slice(1) : []
+            const list = Array.isArray(news) ? news : []
+            const hasNews = list.length > 0
+            const featured = hasNews ? list[0] : null
+            const otherNews = hasNews ? list.slice(1) : []
             const formatDate = (value) => new Date(value).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })
             const preview = (text, limit = 160) => {
                 if (!text) return ''
@@ -29,59 +30,59 @@
 
         <% if (featured) { %>
             <div class="grid gap-8 xl:grid-cols-3 xl:gap-10">
-                <article class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-10 shadow-2xl ring-1 ring-white/10 xl:col-span-2">
-                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(94,234,212,0.12),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(129,140,248,0.16),transparent_35%),radial-gradient(circle_at_50%_90%,rgba(236,72,153,0.12),transparent_45%)]"></div>
+                <article class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm xl:col-span-2">
+                    <div class="absolute inset-0 pointer-events-none bg-gradient-to-br from-white via-white to-transparent"></div>
                     <div class="relative space-y-6">
-                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-200">
-                            <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-emerald-100"><%= featured.Category?.name || 'Без категории' %></span>
-                            <span class="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1">
-                                <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                        <div class="flex flex-wrap items-center gap-3 text-sm text-slate-600">
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-900"><%= featured.Category?.name || 'Без категории' %></span>
+                            <span class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold">
+                                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
                                 <%= formatDate(featured.updatedAt) %>
                             </span>
-                            <span class="inline-flex items-center gap-2 text-gray-300">
-                                <span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-xs font-bold uppercase"><%= (featured.User?.username || 'NA').slice(0, 2) %></span>
-                                Автор: <span class="font-semibold text-white"><%= featured.User?.username || 'Без автора' %></span>
+                            <span class="inline-flex items-center gap-2 text-slate-600">
+                                <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-xs font-semibold uppercase"><%= (featured.User?.username || 'NA').slice(0, 2) %></span>
+                                Автор: <span class="font-semibold text-slate-900"><%= featured.User?.username || 'Без автора' %></span>
                             </span>
                         </div>
-                        <h2 class="text-3xl font-semibold leading-tight text-white md:text-4xl"><%= featured.title %></h2>
-                        <p class="text-lg leading-relaxed text-gray-200"><%= preview(featured.content, 230) %></p>
+                        <h2 class="text-3xl font-semibold leading-tight text-slate-900 md:text-4xl"><%= featured.title %></h2>
+                        <p class="text-lg leading-relaxed text-slate-700"><%= preview(featured.content, 230) %></p>
                         <div class="flex flex-wrap items-center gap-4 pt-2">
-                            <a href="/news" class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-gray-900 shadow-lg ring-2 ring-white/30 transition hover:-translate-y-0.5">
-                                Читать далее
+                            <a href="/news/<%= featured.id %>" class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5">
+                                Читать полностью
                                 <span aria-hidden="true">→</span>
                             </a>
-                            <span class="text-sm text-gray-300">Обновлено <%= featured.updatedAt.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) %></span>
+                            <span class="text-sm text-slate-600">Обновлено <%= featured.updatedAt.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) %></span>
                         </div>
                     </div>
                 </article>
 
                 <div class="space-y-4">
-                    <div class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-xl">
-                        <p class="text-sm uppercase tracking-[0.2em] text-gray-400">Выбор редакции</p>
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <p class="text-xs uppercase tracking-[0.25em] text-slate-500">Выбор редакции</p>
                         <ul class="mt-4 space-y-3">
                             <% if (!otherNews.length) { %>
-                                <li class="rounded-2xl bg-white/5 p-3 text-sm text-gray-300">Больше статей появится совсем скоро.</li>
+                                <li class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">Больше статей появится совсем скоро.</li>
                             <% } %>
                             <% otherNews.slice(0, 3).forEach(function(item) { %>
-                                <li class="rounded-2xl bg-white/5 p-3 transition hover:-translate-y-0.5 hover:bg-white/10">
-                                    <a href="/news" class="block space-y-1">
-                                        <div class="flex items-center justify-between text-xs text-gray-300">
+                                <li class="rounded-xl border border-slate-200 bg-white p-3 transition hover:-translate-y-0.5 hover:shadow-sm">
+                                    <a href="/news/<%= item.id %>" class="block space-y-1">
+                                        <div class="flex items-center justify-between text-xs text-slate-500">
                                             <span><%= item.Category?.name || 'Без категории' %></span>
                                             <span><%= formatDate(item.updatedAt) %></span>
                                         </div>
-                                        <p class="font-semibold leading-snug text-white"><%= item.title %></p>
-                                        <p class="text-sm text-gray-300"><%= preview(item.content, 90) %></p>
-                                        <p class="text-xs text-gray-400">Автор: <span class="text-white"><%= item.User?.username || 'Без автора' %></span></p>
+                                        <p class="font-semibold leading-snug text-slate-900"><%= item.title %></p>
+                                        <p class="text-sm text-slate-600"><%= preview(item.content, 90) %></p>
+                                        <p class="text-xs text-slate-500">Автор: <span class="text-slate-900"><%= item.User?.username || 'Без автора' %></span></p>
                                     </a>
                                 </li>
                             <% }) %>
                         </ul>
                     </div>
-                    <div class="rounded-3xl border border-white/10 bg-gradient-to-r from-emerald-500/10 via-indigo-500/10 to-purple-500/10 p-6 shadow-xl">
-                        <h3 class="text-lg font-semibold text-white">Будьте в курсе</h3>
-                        <p class="mt-2 text-sm text-gray-200">Периодические подборки свежих публикаций без спама.</p>
-                        <a href="/news" class="mt-4 inline-flex items-center gap-2 rounded-full border border-white/30 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white hover:text-gray-900">
-                            К новостям
+                    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-slate-900">Будьте в курсе</h3>
+                        <p class="mt-2 text-sm text-slate-600">Подборки свежих публикаций без спама. Следите за обновлениями новостной ленты.</p>
+                        <a href="/news" class="mt-4 inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
+                            Открыть ленту
                             <span aria-hidden="true">→</span>
                         </a>
                     </div>
@@ -89,32 +90,32 @@
             </div>
 
             <% if (otherNews.length) { %>
-                <div class="space-y-6 rounded-3xl border border-white/10 bg-white/5 p-6 shadow-inner">
+                <div class="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                     <div class="flex items-center justify-between gap-3">
                         <div>
-                            <p class="text-sm text-gray-400">Еще материалы</p>
-                            <h3 class="text-2xl font-semibold text-white">Свежие публикации</h3>
+                            <p class="text-sm text-slate-500">Еще материалы</p>
+                            <h3 class="text-2xl font-semibold text-slate-900">Свежие публикации</h3>
                         </div>
-                        <a href="/news" class="text-sm font-semibold text-emerald-200 transition hover:text-white">Открыть ленту →</a>
+                        <a href="/news" class="text-sm font-semibold text-slate-900 hover:underline">Все новости</a>
                     </div>
                     <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                         <% otherNews.forEach(function(item) { %>
-                            <article class="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 shadow-lg transition hover:-translate-y-1 hover:border-white/30">
-                                <div class="absolute inset-0 bg-gradient-to-br from-white/0 via-white/0 to-white/10 opacity-0 transition group-hover:opacity-100"></div>
+                            <article class="group relative overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
                                 <div class="relative space-y-3">
-                                    <div class="flex items-center justify-between text-xs text-gray-300">
-                                        <span class="rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold text-emerald-100"><%= item.Category?.name || 'Без категории' %></span>
+                                    <div class="flex items-center justify-between text-xs text-slate-500">
+                                        <span class="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-900"><%= item.Category?.name || 'Без категории' %></span>
                                         <span><%= formatDate(item.updatedAt) %></span>
                                     </div>
-                                    <h4 class="text-xl font-semibold leading-snug text-white"><%= item.title %></h4>
-                                    <p class="text-sm leading-relaxed text-gray-300"><%= preview(item.content) %></p>
-                                    <div class="flex items-center gap-3 text-sm text-gray-300">
-                                        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-xs font-bold uppercase"><%= (item.User?.username || 'NA').slice(0, 2) %></div>
+                                    <h4 class="text-xl font-semibold leading-snug text-slate-900"><%= item.title %></h4>
+                                    <p class="text-sm leading-relaxed text-slate-600"><%= preview(item.content) %></p>
+                                    <div class="flex items-center gap-3 text-sm text-slate-600">
+                                        <div class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-xs font-semibold uppercase"><%= (item.User?.username || 'NA').slice(0, 2) %></div>
                                         <div>
-                                            <p class="font-semibold text-white"><%= item.User?.username || 'Без автора' %></p>
-                                            <p class="text-xs text-gray-400">Обновлено <%= item.updatedAt.toLocaleDateString('ru-RU') %></p>
+                                            <p class="font-semibold text-slate-900"><%= item.User?.username || 'Без автора' %></p>
+                                            <p class="text-xs text-slate-500">Обновлено <%= item.updatedAt.toLocaleDateString('ru-RU') %></p>
                                         </div>
                                     </div>
+                                    <a href="/news/<%= item.id %>" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-900 hover:underline">Читать статью →</a>
                                 </div>
                             </article>
                         <% }) %>
@@ -122,16 +123,16 @@
                 </div>
             <% } %>
         <% } else { %>
-            <div class="rounded-3xl border border-dashed border-white/20 bg-white/5 p-10 text-center shadow-inner">
-                <h2 class="text-2xl font-semibold text-white">На главной пока нет статей</h2>
-                <p class="mt-2 text-gray-400">Как только появятся публикации, они сразу будут здесь.</p>
+            <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
+                <h2 class="text-2xl font-semibold text-slate-900">На главной пока нет статей</h2>
+                <p class="mt-2 text-slate-600">Как только появятся публикации, они сразу будут здесь.</p>
                 <div class="mt-6 flex justify-center gap-3">
                     <% if (isEditor || isAdmin) { %>
-                        <a href="/news/create" class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2 text-sm font-semibold text-gray-900 shadow-lg transition hover:-translate-y-0.5">
+                        <a href="/news/create" class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5">
                             Создать первую статью
                         </a>
                     <% } %>
-                    <a href="/news" class="inline-flex items-center gap-2 rounded-full border border-white/30 px-5 py-2 text-sm font-semibold text-white transition hover:bg-white hover:text-gray-900">
+                    <a href="/news" class="inline-flex items-center gap-2 rounded-full border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-100">
                         К списку новостей
                     </a>
                 </div>

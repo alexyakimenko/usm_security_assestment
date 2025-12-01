@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import * as controller from '@/controllers/new.controller'
-import { isAdmin, isAuth } from '@/middleware/auth.middleware'
+import { isAdmin, isAuth, isEditor } from '@/middleware/auth.middleware'
 import {
   createNewsValidator,
   updateNewsValidator,
@@ -10,20 +10,25 @@ import validate from '@/middleware/validate.middleware'
 const router = Router()
 
 router.get('/', controller.list)
-router.get('/create', isAuth, isAdmin, controller.renderCreate)
+router.get('/create', isAuth, isEditor, controller.renderCreate)
 router.post(
   '/',
+  isAuth,
+  isEditor,
   createNewsValidator,
   validate({ failureRedirect: 'news/create', failureFlash: true }),
   controller.create,
 )
-router.get('/:id/edit', isAuth, isAdmin, controller.renderEdit)
+router.get('/:id/edit', isAuth, isEditor, controller.renderEdit)
 router.post(
   '/:id',
+  isAuth,
+  isEditor,
   updateNewsValidator,
   validate({ failureFlash: true }),
   controller.update,
 )
-router.post('/:id/delete', isAuth, isAdmin, controller.destroy)
+router.post('/:id/delete', isAuth, isEditor, controller.destroy)
+router.get('/:id', controller.show)
 
 export default router

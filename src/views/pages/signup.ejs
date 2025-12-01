@@ -1,58 +1,59 @@
 <%- include('../components/head', { page: {title: 'Регистрация'} }) %>
 <%- include('../components/navbar') %>
-<main>
-    <div class="container flex flex-col items-center justify-center mx-auto mt-20">
-        <h1 class="text-2xl font-bold text-gray-900">Регистрация</h1>
-        <form action="/auth/signup" method="post" class="flex flex-col gap-4 border p-8 pt-4 mt-4 rounded">
-            <div>
-                <div class="flex flex-col">
-                    <% for (let error of errors.username) { %>
-                        <p class="text-red-900 text-xs"><%= error %></p>
-                    <% } %>
-                </div>
-                <label for="username" class="flex flex-col gap-1">
-                    <p>Имя пользователя</p>
-                    <input class="border rounded px-2 w-full" type="text" name="username" id="username" value="<%= prev.username %>">
-                </label>
+
+<main class="bg-slate-50">
+    <section class="container mx-auto max-w-md px-4 py-12">
+        <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm space-y-6">
+            <div class="space-y-2">
+                <p class="text-xs uppercase tracking-[0.3em] text-slate-500">Аккаунт</p>
+                <h1 class="text-2xl font-bold text-slate-900">Создать аккаунт</h1>
+                <p class="text-sm text-slate-600">Зарегистрируйтесь, чтобы публиковать и управлять материалами.</p>
             </div>
-            <div>
-                <div class="flex flex-col">
-                    <% for (let error of errors.email) { %>
-                        <p class="text-red-900 text-xs"><%= error %></p>
-                    <% } %>
+
+            <% if (errors.general.length) { %>
+                <div class="space-y-2">
+                    <% errors.general.forEach(function(error) { %>
+                        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"><%= error %></div>
+                    <% }) %>
                 </div>
-                <label for="email">
-                    <p>Почта</p>
-                    <input class="border rounded px-2 w-full" type="email" name="email" id="email" value="<%= prev.email %>">
-                </label>
-            </div>
-            <div>
-                <div class="flex flex-col">
-                    <% for (let error of errors.password) { %>
-                        <p class="text-red-900 text-xs"><%= error %></p>
-                    <% } %>
+            <% } %>
+
+            <form action="/auth/signup" method="post" class="space-y-4">
+                <div class="space-y-1">
+                    <label for="username" class="text-sm font-semibold text-slate-800">Имя пользователя</label>
+                    <input class="w-full rounded-lg border border-slate-200 px-3 py-2 shadow-inner focus:border-slate-900 focus:outline-none" type="text" name="username" id="username" value="<%= prev.username %>" autocomplete="username">
+                    <% errors.username.forEach(function(error) { %>
+                        <p class="text-xs text-red-700"><%= error %></p>
+                    <% }) %>
                 </div>
-                <label for="password">
-                    <p>Пароль</p>
-                    <input class="border rounded px-2 w-full" type="password" name="password" id="password">
-                </label>
-            </div>
-            <div>
-                <div class="flex flex-col">
-                    <% for (let error of errors.password_confirm) { %>
-                        <p class="text-red-900 text-xs"><%= error %></p>
-                    <% } %>
+                <div class="space-y-1">
+                    <label for="email" class="text-sm font-semibold text-slate-800">Email</label>
+                    <input class="w-full rounded-lg border border-slate-200 px-3 py-2 shadow-inner focus:border-slate-900 focus:outline-none" type="email" name="email" id="email" value="<%= prev.email %>" autocomplete="email">
+                    <% errors.email.forEach(function(error) { %>
+                        <p class="text-xs text-red-700"><%= error %></p>
+                    <% }) %>
                 </div>
-                <label for="password_confirm">
-                    <p>Подтвердите пароль</p>
-                    <input class="border rounded px-2 w-full" type="password" name="password_confirm" id="password_confirm">
-                </label>
-            </div>
-            <button type="submit" class="bg-gray-900 text-white py-1 rounded cursor-pointer">Зарегистрироваться</button>
-        </form>
-        <% for (let error of errors.general) { %>
-            <p class="text-red-900"><%= error %></p>
-        <% } %>
-    </div>
+                <div class="space-y-1">
+                    <label for="password" class="text-sm font-semibold text-slate-800">Пароль</label>
+                    <input class="w-full rounded-lg border border-slate-200 px-3 py-2 shadow-inner focus:border-slate-900 focus:outline-none" type="password" name="password" id="password" autocomplete="new-password">
+                    <% errors.password.forEach(function(error) { %>
+                        <p class="text-xs text-red-700"><%= error %></p>
+                    <% }) %>
+                </div>
+                <div class="space-y-1">
+                    <label for="password_confirm" class="text-sm font-semibold text-slate-800">Повторите пароль</label>
+                    <input class="w-full rounded-lg border border-slate-200 px-3 py-2 shadow-inner focus:border-slate-900 focus:outline-none" type="password" name="password_confirm" id="password_confirm" autocomplete="new-password">
+                    <% errors.password_confirm.forEach(function(error) { %>
+                        <p class="text-xs text-red-700"><%= error %></p>
+                    <% }) %>
+                </div>
+                <button type="submit" class="w-full rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800 cursor-pointer">Зарегистрироваться</button>
+            </form>
+            <p class="text-center text-sm text-slate-600">Уже есть аккаунт?
+                <a href="/auth/login" class="font-semibold text-slate-900 hover:underline">Войти</a>
+            </p>
+        </div>
+    </section>
 </main>
+
 <%- include('../components/footer') %>

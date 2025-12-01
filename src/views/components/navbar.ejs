@@ -1,28 +1,33 @@
-<nav class="bg-gray-900 text-white py-4">
-    <div class="container mx-auto flex justify-between flex-col gap-8 md:flex-row xl:gap-0 items-center">
-        <div class="flex items-center gap-8">
-            <a href="/">
-                <h2 class="text-2xl font-bold">NewS</h2>
+<nav class="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur">
+    <div class="container mx-auto max-w-6xl flex justify-between items-center gap-6 px-4 py-4">
+        <div class="flex items-center gap-6">
+            <a href="/" class="flex items-center gap-3">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white text-lg font-semibold">N</span>
+                <span class="text-xl font-semibold text-slate-900">NewS</span>
             </a>
-            <ul class="flex gap-4 text-sm">
+            <ul class="hidden md:flex items-center gap-3 text-sm font-medium text-slate-700">
+                <li><a class="rounded-lg px-3 py-2 hover:bg-slate-100" href="/news">Новости</a></li>
                 <% if (user && isAdmin) { %>
-                    <li class="hover:underline"><a href="/categories">Категории</a></li>
-                    <li class="hover:underline"><a href="/categories/create">Добавить категорию</a></li>
+                    <li><a class="rounded-lg px-3 py-2 hover:bg-slate-100" href="/categories">Категории</a></li>
+                    <li><a class="rounded-lg px-3 py-2 hover:bg-slate-100" href="/categories/create">Создать категорию</a></li>
                 <% } %>
                 <% if (user && (isEditor || isAdmin)) { %>
-                    <li class="hover:underline"><a href="/news">Список новости</a></li>
-                    <li class="hover:underline"><a href="/news/create">Добавить новость</a></li>
+                    <li><a class="rounded-lg px-3 py-2 hover:bg-slate-100" href="/news/create">Создать новость</a></li>
                 <% } %>
             </ul>
         </div>
-        <% if(user) {%>
-            <div>
-                <a href="/user/profile"><%= user.username %></a>
+        <% if(user) { %>
+            <div class="flex items-center gap-3">
+                <span class="hidden text-sm text-slate-600 md:inline">Привет, <%= user.username %></span>
+                <a href="/user/profile" class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100">Профиль</a>
+                <form action="/auth/logout" method="post">
+                    <button type="submit" class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800 cursor-pointer">Выйти</button>
+                </form>
             </div>
         <% } else { %>
-            <div class="flex gap-4">
-                <a href="/auth/signup"><button class="cursor-pointer px-2 py-1 rounded hover:bg-white hover:text-gray-900 transition-colors">Регистрация</button></a>
-                <a href="/auth/login"><button class="cursor-pointer border px-2 py-1 rounded hover:bg-white hover:text-gray-900 transition-colors">Вход</button></a>
+            <div class="flex gap-3">
+                <a href="/auth/signup" class="rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100">Регистрация</a>
+                <a href="/auth/login" class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800">Войти</a>
             </div>
         <% } %>
     </div>

@@ -1,68 +1,69 @@
 <%- include('../../components/head', { page: { title: 'Новости' } }) %>
 <%- include('../../components/navbar') %>
-<main class="container mx-auto px-4 py-10 space-y-6">
-  <div class="flex items-center justify-between gap-4">
-    <div>
-      <p class="text-sm text-gray-500">Лента новостей</p>
-      <h1 class="text-3xl font-bold text-gray-900">Новости</h1>
-    </div>
-    <% if (isAdmin) { %>
-      <a
-        href="/news/create"
-        class="inline-flex items-center gap-2 rounded bg-gray-900 px-4 py-2 text-white hover:bg-gray-700 transition-colors"
-      >
-        <span class="text-lg leading-none">+</span>
-        <span>Добавить новость</span>
-      </a>
-    <% } %>
-  </div>
-
-  <% if (messages.success.length) { %>
-    <% messages.success.forEach(function(msg) { %>
-      <div class="rounded border border-green-200 bg-green-50 px-4 py-3 text-green-900">
-        <%= msg %>
+<main class="bg-slate-50">
+  <section class="container mx-auto max-w-6xl px-4 py-12 space-y-8">
+    <div class="flex items-center justify-between gap-4">
+      <div>
+        <p class="text-sm text-slate-500">Список публикаций</p>
+        <h1 class="text-3xl font-bold text-slate-900">Новости</h1>
       </div>
-    <% }) %>
-  <% } %>
-  <% if (messages.error.length) { %>
-    <% messages.error.forEach(function(msg) { %>
-      <div class="rounded border border-red-200 bg-red-50 px-4 py-3 text-red-900">
-        <%= msg %>
-      </div>
-    <% }) %>
-  <% } %>
-
-  <div class="overflow-hidden rounded border border-gray-200">
-    <div class="grid grid-cols-12 bg-gray-50 px-4 py-2 text-sm font-semibold text-gray-600">
-      <div class="col-span-3">Заголовок</div>
-      <div class="col-span-3">Категория</div>
-      <div class="col-span-3">Автор</div>
-      <div class="col-span-2">Обновлено</div>
-      <div class="col-span-1 text-right">Действия</div>
+      <% if (isAdmin) { %>
+        <a
+          href="/news/create"
+          class="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-slate-800"
+        >
+          <span class="text-lg leading-none">+</span>
+          <span>Создать новость</span>
+        </a>
+      <% } %>
     </div>
-    <% if (news.length === 0) { %>
-      <div class="px-4 py-6 text-gray-500">Нет новостей.</div>
-    <% } %>
-    <% news.forEach(function(item) { %>
-      <div class="grid grid-cols-12 border-t border-gray-200 px-4 py-3 items-center">
-        <div class="col-span-3 font-medium text-gray-900"><%= item.title %></div>
-        <div class="col-span-3 text-gray-700"><%= item.Category?.name || '—' %></div>
-        <div class="col-span-3 text-gray-700"><%= item.User?.username || '—' %></div>
-        <div class="col-span-2 text-gray-500 text-sm"><%= item.updatedAt.toLocaleDateString() %></div>
-        <div class="col-span-1 flex justify-end">
-          <% if (isAdmin) { %>
-            <div class="flex items-center gap-3">
-              <a href="/news/<%= item.id %>/edit" class="text-sm text-blue-700 hover:underline">Редактировать</a>
-              <form action="/news/<%= item.id %>/delete" method="post" onsubmit="return confirm('Удалить новость?');">
-                <button type="submit" class="text-sm text-red-700 hover:underline cursor-pointer">Удалить</button>
-              </form>
-            </div>
-          <% } else { %>
-            <span class="text-xs text-gray-400">—</span>
-          <% } %>
+
+    <% if (messages.success.length) { %>
+      <% messages.success.forEach(function(msg) { %>
+        <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-900">
+          <%= msg %>
         </div>
+      <% }) %>
+    <% } %>
+    <% if (messages.error.length) { %>
+      <% messages.error.forEach(function(msg) { %>
+        <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-900">
+          <%= msg %>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div class="grid grid-cols-12 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-600">
+        <div class="col-span-3">Заголовок</div>
+        <div class="col-span-3">Категория</div>
+        <div class="col-span-2">Автор</div>
+        <div class="col-span-2">Обновлено</div>
+        <div class="col-span-2 text-right">Действия</div>
       </div>
-    <% }) %>
-  </div>
+      <% if (news.length === 0) { %>
+        <div class="px-4 py-6 text-slate-600">Новостей пока нет.</div>
+      <% } %>
+      <% news.forEach(function(item) { %>
+        <div class="grid grid-cols-12 border-t border-slate-200 px-4 py-3 items-center">
+          <div class="col-span-3 font-medium text-slate-900"><%= item.title %></div>
+          <div class="col-span-3 text-slate-700"><%= item.Category?.name || 'Без категории' %></div>
+          <div class="col-span-2 text-slate-700"><%= item.User?.username || 'Без автора' %></div>
+          <div class="col-span-2 text-slate-600 text-sm"><%= item.updatedAt.toLocaleDateString() %></div>
+          <div class="col-span-2 flex justify-end">
+            <div class="flex items-center gap-3 text-sm">
+              <a href="/news/<%= item.id %>" class="text-slate-900 hover:underline">Открыть</a>
+              <% if (isAdmin) { %>
+                <a href="/news/<%= item.id %>/edit" class="text-slate-900 hover:underline">Редактировать</a>
+                <form action="/news/<%= item.id %>/delete" method="post" onsubmit="return confirm('Удалить новость?');">
+                  <button type="submit" class="text-red-700 hover:underline cursor-pointer">Удалить</button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </section>
 </main>
 <%- include('../../components/footer') %>
