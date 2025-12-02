@@ -37,10 +37,9 @@
                 </div>
                 <div class="grid grid-cols-12 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
                     <div class="col-span-2">When</div>
-                    <div class="col-span-2">User</div>
-                    <div class="col-span-2">Role</div>
+                    <div class="col-span-3">User</div>
                     <div class="col-span-2">Action</div>
-                    <div class="col-span-2">Details</div>
+                    <div class="col-span-3">Details</div>
                     <div class="col-span-1 text-right">IP</div>
                     <div class="col-span-1 text-right">Agent</div>
                 </div>
@@ -50,10 +49,9 @@
                 <% userLogs.forEach(function(log) { %>
                     <div class="grid grid-cols-12 items-start gap-2 border-t border-slate-200 px-4 py-3 text-sm">
                         <div class="col-span-2 text-slate-700"><%= formatDateTime(log.createdAt) %></div>
-                        <div class="col-span-2 text-slate-900 font-semibold"><%= log.User ? log.User.username : 'Unknown' %></div>
-                        <div class="col-span-2 text-slate-700"><%= log.Role ? log.Role.name : 'Unknown' %></div>
+                        <div class="col-span-3 text-slate-900 font-semibold"><%= log.User ? log.User.username : 'Unknown' %></div>
                         <div class="col-span-2 text-slate-900 font-semibold"><%= log.action_type %></div>
-                        <div class="col-span-2 text-slate-700"><%= shorten(log.action_details, 80) %></div>
+                        <div class="col-span-3 text-slate-700"><%= shorten(log.action_details, 80) %></div>
                         <div class="col-span-1 text-right text-slate-700"><%= log.ip_address %></div>
                         <div class="col-span-1 text-right text-slate-500 text-xs leading-snug"><%= shorten(log.user_agent, 40) %></div>
                     </div>

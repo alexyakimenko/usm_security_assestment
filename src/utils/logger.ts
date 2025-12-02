@@ -4,7 +4,6 @@ import { AppErrorLog } from '@/models/app-error-log.model'
 
 interface UserData {
   user_id?: string
-  role_id?: string
   ip_address?: string
   user_agent?: string
 }
@@ -26,6 +25,18 @@ class Logger {
 
   public setUserData(userData: UserData) {
     this.userData = userData
+  }
+
+  public setUserId(user_id: string) {
+    this.userData.user_id = user_id
+  }
+
+  public setIpAddress(ip_address: string) {
+    this.userData.ip_address = ip_address
+  }
+
+  public setUserAgent(user_agent: string) {
+    this.userData.user_agent = user_agent
   }
 
   public async userAction(

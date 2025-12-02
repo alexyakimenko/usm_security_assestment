@@ -59,6 +59,7 @@ passport.use(
         })
       }
 
+      logger.setUserId(user.id.toString())
       logger
         .userAction(
           UserActionType.Login,

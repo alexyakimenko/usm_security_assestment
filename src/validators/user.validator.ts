@@ -2,7 +2,6 @@ import { body } from 'express-validator'
 
 const username = body('username')
   .trim()
-  .escape()
   .notEmpty()
   .withMessage('Логин обязателен')
   .isLength({ min: 3, max: 30 })
@@ -10,21 +9,28 @@ const username = body('username')
 
 const password = body('password')
   .trim()
-  .escape()
   .notEmpty()
   .withMessage('Пароль обязателен')
-  .isLength({ min: 6 })
-  .withMessage('Пароль должен быть как минимум 6 символов')
+  .isLength({ min: 8 })
+  .withMessage('Пароль должен быть как минимум 8 символов')
+  .isStrongPassword({
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+  })
+  .withMessage(
+    'Пароль должен содержать как минимум одну заглавную букву, одну строчную букву, одну цифру и один специальный символ',
+  )
 
 const passwordConfirm = body('password_confirm')
   .trim()
-  .escape()
   .notEmpty()
   .withMessage('Подтверждение пароля необходимо')
 
 const email = body('email')
   .trim()
-  .escape()
   .notEmpty()
   .withMessage('Почта обязательна')
   .isEmail()
