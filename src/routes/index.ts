@@ -3,10 +3,11 @@ import authRouter from '@/routes/auth.routes'
 import userRouter from '@/routes/user.routes'
 import categoryRouter from '@/routes/category.routes'
 import newsRouter from '@/routes/new.routes'
+import logsRouter from '@/routes/logs.routes'
 import { Category } from '@/models/category.model'
 import { News } from '@/models/new.model'
 import { User } from '@/models/user.model'
-import { isAuth } from '@/middleware/auth.middleware'
+import { isAdmin, isAuth } from '@/middleware/auth.middleware'
 
 const router = Router()
 
@@ -33,6 +34,7 @@ router.use('/auth', authRouter)
 router.use('/user', userRouter)
 router.use('/categories', isAuth, categoryRouter)
 router.use('/news', newsRouter)
+router.use('/logs', isAuth, isAdmin, logsRouter)
 
 // not found page
 router.use((_: Request, res: Response) => {

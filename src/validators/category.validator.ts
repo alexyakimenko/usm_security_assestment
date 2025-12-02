@@ -3,6 +3,7 @@ import { Category } from '@/models/category.model'
 
 const name = body('name')
   .trim()
+  .escape()
   .notEmpty()
   .withMessage('Name is required.')
   .isLength({ max: 30 })
@@ -18,6 +19,7 @@ const name = body('name')
 
 const description = body('description')
   .trim()
+  .escape()
   .notEmpty()
   .withMessage('Description is required.')
   .isLength({ min: 1, max: 5000 })

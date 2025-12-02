@@ -4,6 +4,7 @@ import { Category } from '@/models/category.model'
 
 const title = body('title')
   .trim()
+  .escape()
   .notEmpty()
   .withMessage('Заголовок обязателен.')
   .isLength({ max: 100 })
@@ -19,12 +20,15 @@ const title = body('title')
 
 const content = body('content')
   .trim()
+  .escape()
   .notEmpty()
   .withMessage('Содержимое обязательно.')
   .isLength({ min: 1, max: 10000 })
   .withMessage('Содержимое должно быть от 1 до 10000 символов.')
 
 const categoryId = body('category_id')
+  .trim()
+  .escape()
   .notEmpty()
   .withMessage('Категория обязательна.')
   .bail()
