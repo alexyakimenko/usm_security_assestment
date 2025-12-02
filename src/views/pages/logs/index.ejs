@@ -1,0 +1,126 @@
+<%- include('../../components/head', { page: { title: 'System Logs' } }) %>
+<%- include('../../components/navbar') %>
+
+<main class="bg-slate-50">
+    <section class="container mx-auto max-w-6xl px-4 py-12 space-y-8">
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+                <p class="text-sm text-slate-500">Latest security-related activity snapshots.</p>
+                <h1 class="text-3xl font-bold text-slate-900">System Logs</h1>
+                <p class="text-xs text-slate-500">Showing up to <%= limit %> recent records per section.</p>
+            </div>
+            <a href="/" class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-100">Back to home</a>
+        </div>
+
+        <%
+            const formatDateTime = (value) => {
+                if (!value) return 'N/A'
+                const date = new Date(value)
+                return isNaN(date.getTime()) ? 'N/A' : date.toLocaleString('ru-RU')
+            }
+            const shorten = (value, length = 120) => {
+                if (!value) return 'N/A'
+                const text = String(value)
+                return text.length > length ? text.slice(0, length) + '...' : text
+            }
+        %>
+
+        <div class="space-y-6">
+            <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div class="flex items-center justify-between gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3">
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Section 01</p>
+                        <h2 class="text-xl font-semibold text-slate-900">User Logs</h2>
+                        <p class="text-xs text-slate-500">Authentication, content and subscription actions.</p>
+                    </div>
+                    <span class="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white"><%= userLogs.length %> items</span>
+                </div>
+                <div class="grid grid-cols-12 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <div class="col-span-2">When</div>
+                    <div class="col-span-2">User</div>
+                    <div class="col-span-2">Role</div>
+                    <div class="col-span-2">Action</div>
+                    <div class="col-span-2">Details</div>
+                    <div class="col-span-1 text-right">IP</div>
+                    <div class="col-span-1 text-right">Agent</div>
+                </div>
+                <% if (!userLogs.length) { %>
+                    <div class="px-4 py-6 text-sm text-slate-600">No user activity recorded yet.</div>
+                <% } %>
+                <% userLogs.forEach(function(log) { %>
+                    <div class="grid grid-cols-12 items-start gap-2 border-t border-slate-200 px-4 py-3 text-sm">
+                        <div class="col-span-2 text-slate-700"><%= formatDateTime(log.createdAt) %></div>
+                        <div class="col-span-2 text-slate-900 font-semibold"><%= log.User ? log.User.username : 'Unknown' %></div>
+                        <div class="col-span-2 text-slate-700"><%= log.Role ? log.Role.name : 'Unknown' %></div>
+                        <div class="col-span-2 text-slate-900 font-semibold"><%= log.action_type %></div>
+                        <div class="col-span-2 text-slate-700"><%= shorten(log.action_details, 80) %></div>
+                        <div class="col-span-1 text-right text-slate-700"><%= log.ip_address %></div>
+                        <div class="col-span-1 text-right text-slate-500 text-xs leading-snug"><%= shorten(log.user_agent, 40) %></div>
+                    </div>
+                <% }) %>
+            </div>
+
+            <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div class="flex items-center justify-between gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3">
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Section 02</p>
+                        <h2 class="text-xl font-semibold text-slate-900">HTTP Error Logs</h2>
+                        <p class="text-xs text-slate-500">Captured non-successful responses with request metadata.</p>
+                    </div>
+                    <span class="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white"><%= httpLogs.length %> items</span>
+                </div>
+                <div class="grid grid-cols-12 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <div class="col-span-2">When</div>
+                    <div class="col-span-1">Status</div>
+                    <div class="col-span-1">Method</div>
+                    <div class="col-span-4">URL</div>
+                    <div class="col-span-3">Message</div>
+                    <div class="col-span-1 text-right">IP</div>
+                </div>
+                <% if (!httpLogs.length) { %>
+                    <div class="px-4 py-6 text-sm text-slate-600">No HTTP issues captured yet.</div>
+                <% } %>
+                <% httpLogs.forEach(function(log) { %>
+                    <div class="grid grid-cols-12 items-start gap-2 border-t border-slate-200 px-4 py-3 text-sm">
+                        <div class="col-span-2 text-slate-700"><%= formatDateTime(log.createdAt) %></div>
+                        <div class="col-span-1 font-semibold text-slate-900"><%= log.status_code %></div>
+                        <div class="col-span-1 text-slate-700"><%= log.method %></div>
+                        <div class="col-span-4 text-slate-900"><%= shorten(log.url, 80) %></div>
+                        <div class="col-span-3 text-slate-700"><%= shorten(log.message, 120) %></div>
+                        <div class="col-span-1 text-right text-slate-700"><%= log.ip_address %></div>
+                    </div>
+                <% }) %>
+            </div>
+
+            <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div class="flex items-center justify-between gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3">
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Section 03</p>
+                        <h2 class="text-xl font-semibold text-slate-900">App Errors</h2>
+                        <p class="text-xs text-slate-500">Unhandled exceptions or internal failures.</p>
+                    </div>
+                    <span class="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white"><%= appErrors.length %> items</span>
+                </div>
+                <div class="grid grid-cols-12 bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <div class="col-span-3">When</div>
+                    <div class="col-span-2">Type</div>
+                    <div class="col-span-4">Message</div>
+                    <div class="col-span-3">URL</div>
+                </div>
+                <% if (!appErrors.length) { %>
+                    <div class="px-4 py-6 text-sm text-slate-600">No application errors found.</div>
+                <% } %>
+                <% appErrors.forEach(function(log) { %>
+                    <div class="grid grid-cols-12 items-start gap-2 border-t border-slate-200 px-4 py-3 text-sm">
+                        <div class="col-span-3 text-slate-700"><%= formatDateTime(log.createdAt) %></div>
+                        <div class="col-span-2 font-semibold text-slate-900"><%= log.error_type %></div>
+                        <div class="col-span-4 text-slate-700"><%= shorten(log.message, 120) %></div>
+                        <div class="col-span-3 text-slate-900"><%= shorten(log.url, 80) %></div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('../../components/footer') %>
