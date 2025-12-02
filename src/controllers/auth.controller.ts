@@ -2,6 +2,8 @@ import express from 'express'
 import { Role, User } from '@/models'
 import { Roles } from '@/models/role.model'
 import bcrypt from 'bcrypt'
+import logger from '@/utils/logger'
+import { UserActionType } from '@/models/user-action-log.model'
 
 export const renderRegister = async (
   req: express.Request,
@@ -50,6 +52,9 @@ export const logout = async (
     if (err) {
       return next(err)
     }
+
+    logger.userAction(UserActionType.Logout, 'User was logged out.')
+
     res.redirect('/')
   })
 }

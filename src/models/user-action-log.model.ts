@@ -14,7 +14,6 @@ export enum UserActionType {
 export class UserActionLog extends Model {
   public id!: number
   public user_id!: number | null
-  public role_id!: number | null
   public action_type!: UserActionType
   public action_details!: string | null
   public ip_address!: string
@@ -31,10 +30,6 @@ export const UserActionLogFactory = (sequelize: Sequelize) => {
         primaryKey: true,
       },
       user_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      role_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },

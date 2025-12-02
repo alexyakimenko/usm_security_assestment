@@ -4,6 +4,8 @@ import { News } from '@/models/new.model'
 import { User } from '@/models/user.model'
 import { Op } from 'sequelize'
 import { validationResult } from 'express-validator'
+import logger from '@/utils/logger'
+import { UserActionType } from '@/models/user-action-log.model'
 
 const getFormData = async (req: express.Request) => {
   const categories = await Category.findAll({ order: [['name', 'ASC']] })
@@ -44,7 +46,9 @@ export const favorites = async (
   const user = req.user as User
   // @ts-ignore sequelize mixin for subscriptions
   const categories = await (user as any).getSubs({ order: [['name', 'ASC']] })
-  const subscribedIds = categories.map((category: { id: number }) => category.id)
+  const subscribedIds = categories.map(
+    (category: { id: number }) => category.id,
+  )
 
   const requestedCategoryId = Number(req.query.category) || null
   const activeCategoryId =
@@ -102,7 +106,7 @@ export const renderCreate = async (
 }
 
 export const create = async (req: express.Request, res: express.Response) => {
-  await News.create({
+  const article = await News.create({
     title: req.body.title,
     content: req.body.content,
     category_id: req.body.category_id,
@@ -110,6 +114,14 @@ export const create = async (req: express.Request, res: express.Response) => {
     author_id: req.user?.id,
   })
   req.flash('success', 'Новость опубликована.')
+
+  logger
+    .userAction(
+      UserActionType.CreateNews,
+      'Article was created: id = ' + article.id,
+    )
+    .then()
+
   return res.redirect('/news')
 }
 
@@ -156,6 +168,14 @@ export const update = async (req: express.Request, res: express.Response) => {
     category_id: req.body.category_id,
   })
   req.flash('success', 'Новость обновлена.')
+
+  logger
+    .userAction(
+      UserActionType.UpdateNews,
+      'Article was updated: id = ' + req.params.id,
+    )
+    .then()
+
   return res.redirect('/news')
 }
 
@@ -168,5 +188,13 @@ export const destroy = async (req: express.Request, res: express.Response) => {
 
   await newsItem.destroy()
   req.flash('success', 'Новость удалена.')
+
+  logger
+    .userAction(
+      UserActionType.DeleteNews,
+      'Article was deleted: id = ' + req.params.id,
+    )
+    .then()
+
   return res.redirect('/news')
 }

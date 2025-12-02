@@ -9,6 +9,8 @@ import flash from 'connect-flash'
 
 import '@/strategies/local.strategy'
 import { authViews } from '@/middleware/auth.middleware'
+import logger from '@/utils/logger'
+import setupLogger from '@/middleware/logger.middleware'
 
 const app = express()
 
@@ -29,6 +31,8 @@ app.use(
 app.use(flash())
 app.use(passport.initialize())
 app.use(passport.session())
+
+app.use(setupLogger)
 
 app.use(authViews)
 

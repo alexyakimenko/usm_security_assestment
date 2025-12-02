@@ -8,6 +8,7 @@ import { Category } from '@/models/category.model'
 import { News } from '@/models/new.model'
 import { User } from '@/models/user.model'
 import { isAdmin, isAuth } from '@/middleware/auth.middleware'
+import logger from '@/utils/logger'
 
 const router = Router()
 
@@ -37,7 +38,14 @@ router.use('/news', newsRouter)
 router.use('/logs', isAuth, isAdmin, logsRouter)
 
 // not found page
-router.use((_: Request, res: Response) => {
+router.use((req: Request, res: Response) => {
+  logger
+    .httpError(
+      { method: 'get', url: req.url, status_code: 404 },
+      'Page not found',
+    )
+    .then()
+
   res.render('pages/404')
 })
 
